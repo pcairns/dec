@@ -5,11 +5,17 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , redis = require('redis');
 
 var app = express();
+var client = redis.createClient();
+var recipe = require('./routes/recipe')(client);
+
+client.on('error', function(err) {
+    console.log(err);
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -28,7 +34,12 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+
+app.get('/recipe', recipe.list);
+app.get('/recipe/:key', recipe.retrieve);
+app.put('/recipe/:key', recipe.replace);
+app.post('/recipe', recipe.create);
+app.delete('recipe/:key', recipe.delete);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
