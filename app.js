@@ -7,11 +7,13 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http')
   , path = require('path')
-  , redis = require('redis');
+  , redis = require('redis')
+  , client = redis.createClient()
+  , yeast = require('./models/yeast')(client);
 
 var app = express();
-var client = redis.createClient();
-var recipe = require('./routes/recipe')(client);
+var recipe = require('./routes/recipe')(client),
+    yeast_routes = require('./routes/yeast')(yeast);
 
 client.on('error', function(err) {
     console.log(err);
@@ -35,6 +37,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+
+app.get('/yeast', yeast_routes.list);
+app.get('/yeast/:key', yeast_routes.retrieve);
 
 app.get('/recipe', recipe.list);
 app.get('/recipe/:key', recipe.retrieve);
