@@ -2,11 +2,11 @@ var ingredient = require('./ingredient'),
     _ = require('underscore');
 
 module.exports = function(redis) {
-    var yeast = {
+    var hop = {
         redis: redis,
-        collection: 'yeasts'
+        collection: 'hops'
     };
-    _.extend(yeast, ingredient);
+    _.extend(hop, ingredient);
 
-    return yeast;
+    return hop;
 };

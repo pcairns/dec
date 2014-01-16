@@ -9,11 +9,19 @@ var express = require('express')
   , path = require('path')
   , redis = require('redis')
   , client = redis.createClient()
-  , yeast = require('./models/yeast')(client);
+  , yeast = require('./models/yeast')(client)
+  , hop = require('./models/hop')(client)
+  , malt = require('./models/malt')(client);
+
+malt.build();
 
 var app = express();
 var recipe = require('./routes/recipe')(client),
-    yeast_routes = require('./routes/yeast')(yeast);
+    yeast_routes = require('./routes/yeast')(yeast),
+    hop_routes = require('./routes/hop')(hop),
+    malt_routes = require('./routes/hop')(malt);
+
+
 
 client.on('error', function(err) {
     console.log(err);
@@ -38,8 +46,14 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
-app.get('/yeast', yeast_routes.list);
-app.get('/yeast/:key', yeast_routes.retrieve);
+app.get('/hops', hop_routes.list);
+app.get('/hops/:key', hop_routes.retrieve);
+
+app.get('/yeasts', yeast_routes.list);
+app.get('/yeasts/:key', yeast_routes.retrieve);
+
+app.get('/malts', malt_routes.list);
+app.get('/malts/:key', malt_routes.retrieve);
 
 app.get('/recipe', recipe.list);
 app.get('/recipe/:key', recipe.retrieve);
