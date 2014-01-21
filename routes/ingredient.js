@@ -1,7 +1,5 @@
 module.exports = function(model) {
     return {
-
-        // GET /yeast/
         list: function(req, res) {
             model.all(function(err, items) {
                 if(err) throw err;
@@ -9,7 +7,7 @@ module.exports = function(model) {
             });
         },
 
-        // GET /yeast/:key
+        // GET /hops/:key
         retrieve: function(req, res) {
             var key = req.params.key;
             

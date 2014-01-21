@@ -13,13 +13,11 @@ var express = require('express')
   , hop = require('./models/hop')(client)
   , malt = require('./models/malt')(client);
 
-malt.build();
-
 var app = express();
 var recipe = require('./routes/recipe')(client),
-    yeast_routes = require('./routes/yeast')(yeast),
-    hop_routes = require('./routes/hop')(hop),
-    malt_routes = require('./routes/hop')(malt);
+    yeast_routes = require('./routes/ingredient')(yeast),
+    hop_routes = require('./routes/ingredient')(hop),
+    malt_routes = require('./routes/ingredient')(malt);
 
 
 
