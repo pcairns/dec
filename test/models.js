@@ -3,16 +3,10 @@ var should = require('chai').should()
   , client = redis.createClient()
   , yeast = require('../models/yeast')(client)
   , hop = require('../models/hop')(client)
-  , malt = require('../models/malt')(client);
+  , malt = require('../models/malt')(client)
+  , recipe = require('../models/recipe')(client);
 
 describe("hop", function() {
-    it("should inherit from ingredient", function() {
-        hop.should.be.an('object');        
-        hop.should.have.a.property('redis');
-        hop.should.have.a.property('collection');
-        hop.should.have.a.property('api_key');
-        hop.should.have.a.property('api_base');
-    });
     describe(".get", function() {
       it("should return information about a type of hop", function() {
         hop.get(4, function(err, result) {
@@ -53,4 +47,10 @@ describe("malt", function() {
         malt.should.have.a.property('redis');
         malt.should.have.a.property('collection');
     });
+});
+
+describe("recipe", function() {
+  recipe.should.be.an("object");
+  recipe.should.have.property('redis');
+  recipe.should.have.property('collection');
 });
